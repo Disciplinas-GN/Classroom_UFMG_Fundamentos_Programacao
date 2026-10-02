@@ -1,0 +1,13 @@
+{
+  "name": "Fundamentos de programação para Ciências Biológicas",
+  "image": "ghcr.io/rocker-org/devcontainer/r-ver:4",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "REditorSupport.r",
+        "mickaeljan.bioinformatics-pack"
+      ]
+    }
+  },
+  "postCreateCommand": "R -e \"install.packages(c('tidyverse', 'BiocManager', 'ggplot2', 'httpgd', 'languageserver'), repos='https://cloud.r-project.org/')\""
+}
