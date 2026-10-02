@@ -9,5 +9,5 @@
       ]
     }
   },
-  "postCreateCommand": "R -e \"install.packages(c('tidyverse', 'BiocManager', 'ggplot2', 'httpgd', 'languageserver'), repos='https://cloud.r-project.org/')\""
+  "postCreateCommand": "R -e \"install.packages(c('languageserver', 'httpgd'), repos='https://cloud.r-project.org/')\""
 }
