@@ -1,0 +1,64 @@
+---
+title: "Aula 1 - Algoritmos e lógica de programação"
+format:
+  html:
+    code-copy: true
+    code-tools:
+      source: true
+      toggle: true # Opcional: esconde o botão de ocultar/mostrar códigos se não quiser
+---
+
+Essa lista de exercícios tem como objetivo realizar práticas de lógica que serão importantes para a sequência das aulas. Para resolução você não precisa de nenhuma linguagem de programação, apenas raciocínio lógico e bom-senso. O modo de resolução é livre, mas dê preferência ao formato mostrado em aula, que segue o exemplo mostrado abaixo:
+
+Início
+1. Pegue os valores 100, 67 e 30
+2. Subtrair 67 de 100 e dividir o resultado  por 30
+3. mostrar o resultado final
+FIM
+
+## Exercício 1 — Descobrindo a moeda falsa
+
+Você possui **cinco moedas aparentemente iguais**, mas sabe que **uma delas é falsa**. A moeda falsa é **mais leve** do que as outras quatro moedas.
+
+Você possui uma **balança de dois pratos**, que permite apenas comparar o peso dos objetos colocados em cada lado. A balança pode indicar que:
+
+* os dois lados têm o mesmo peso;
+* o lado esquerdo é mais leve;
+* o lado direito é mais leve.
+
+### Tarefa
+
+Descreva, na forma de um **algoritmo**, como descobrir qual é a moeda falsa utilizando o **menor número possível de pesagens**.
+
+Você não precisa utilizar nenhuma linguagem de programação. Utilize apenas raciocínio lógico e descreva as etapas da solução de forma clara e ordenada.
+
+Dê preferência ao formato utilizado em aula:
+
+**Início**
+
+1. ...
+
+2. ...
+
+3. ...
+
+**FIM**
+
+**Importante:** sua solução deve funcionar independentemente de qual das cinco moedas seja a falsa.
+
+## Exercício 2 - Conpreensão de algoritmos
+
+Considere o algoritmo
+
+**INÍCIO**
+
+1. Ler os valores de A e B
+2. C <- 0
+3. Enquanto A > B Faça
+4.      Subtraia B de A, coloque o resultado em A e some 1 em C 
+5. Fim Enquanto
+6. Mostre os valores finais de C e de A
+
+**FIM**
+
+Execute essas instruções para os seguintes pares de números: 10 e 2, 6 e 2, 15 e 3. O que significa o valor final de C? e o Valor final de A?
