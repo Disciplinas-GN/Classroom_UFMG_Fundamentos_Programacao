@@ -72,3 +72,6 @@ for (i in 1:length(abundancias)) {
   total <- total + abundancias[i]
   soma_acumulada[i] <- total
 }
+
+
+# Fim de exemplos em aula 
