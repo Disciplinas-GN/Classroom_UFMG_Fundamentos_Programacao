@@ -41,6 +41,7 @@ abundancia <- 1:1000
 
 
 for (i in 3:length(abundancias)) {
+
   print(abundancias[i])
   Sys.sleep(2)
 }
@@ -75,3 +76,52 @@ for (i in 1:length(abundancias)) {
 
 
 # Fim de exemplos em aula 
+
+
+abundancias <- c(12, 8, 25)
+
+total <- 0
+i <- 1
+
+while (i <= length(abundancias)) {
+  total <- total + abundancias[i]
+  i <- i + 1
+}
+
+for(i in 1:length(abundancias)){
+  total <- total + abundancias[i]
+}
+
+abundancias <- c(12, 8, 25, 17, 10)
+
+total <- 0
+i <- 1
+
+while (total < 30 && i <= length(abundancias)) {
+  total <- total + abundancias[i]
+  i <- i + 1
+}
+
+
+abundancias <- c(12, 8, 25, 17, 10)
+
+total <- 0
+i <- 1
+
+repeat {
+  total <- total + abundancias[i]
+  i <- i + 1
+
+  if (total >= 30 || i > length(abundancias)) {
+    break
+  }
+}
+
+quatro_alg <- 1000:9999
+c(1, 10, 12)
+length(quatro_alg)
+
+teste <- vector(length = length(quatro_alg))
+quatro_alg_check <- list(type = "vector", length(quatro_alg))
+quatro_alg_check[i] <- TRUE 
+total
