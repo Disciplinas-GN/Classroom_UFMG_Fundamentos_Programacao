@@ -1,30 +1,116 @@
 ---
-title: "Untitled"
+title: "A rotação no volei"
 output: github_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+# Problema
+
+Como saber qual jogador estará no saque em qualquer momento da partida, dado um valor inicial de cada jogador em cada posição em quadra?
+
+# Dados necessários
+
+Primeiro simulando o que seria uma sequência de pontuação 
+
+```{r}
+matrix_pontos <- matrix(NA, nrow = 50, ncol = 2) # cria matriz que recebe número de pontos
+index <- 1 # cria indice para repetição
+
+while((colSums(matrix_pontos, na.rm = TRUE)[1] < 25 & colSums(matrix_pontos, na.rm = TRUE)[2] < 25)){ # regra para amostrar até primeiro time alcançar 25 pontos
+    matrix_pontos[index, ] <- sample(c(1, 0), size = 2, replace = FALSE)
+    index <- index + 1
+}
+
+colSums(matrix_pontos, na.rm = TRUE) # conferindo se tem 25 pontos 
+matrix_pontos <- matrix_pontos[- which(is.na(rowSums(matrix_pontos)) == TRUE), ] # removendo espaços em branco que não foram necessários na matriz
+rownames(matrix_pontos) <- paste("pontos", 1:nrow(matrix_pontos), sep = ".")
+colnames(matrix_pontos) <- c("time.A", "time.B")
+
 ```
 
-## GitHub Documents
+Data frame contendo posições iniciais, isso é fixo, apenas número dos jogadores é modificado
 
-This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
-
-## Including Code
-
-You can include R code in the document as follows:
-
-```{r cars}
-summary(cars)
+```{r}
+n_player_inicial1 <- sample(c(1:12), size = 6, replace = FALSE)
+n_player_inicial2 <- sample(c(1:12), size = 6, replace = FALSE)
+df_time1 <- data.frame(posicao = c(1, 6, 5, 4, 3, 2),  pontos.0 = n_player_inicial1)
+df_time2 <- data.frame(posicao = c(1, 6, 5, 4, 3, 2), pontos.0 = n_player_inicial2)
 ```
 
-## Including Plots
+Criando a regra de rotação
 
-You can also embed plots, for example:
+```{r}
+rodada <- 0 # início do jogo
+time_roda <- names(which(matrix_pontos[1, ] == 1)[TRUE]) # qual time roda no primeiro ponto?
+if(time_roda == "time.A"){ # time A
+    df_time1[, paste("pontos", rodada + 1, sep = ".")] <- df_time1[, paste("pontos", rodada, sep = ".")][c(nrow(df_time1), 2:nrow(df_time1) - 1)] # roda e atualiza a rodada
+    df_time2[, paste("pontos", rodada + 1, sep = ".")] <- df_time2[, paste("pontos", rodada, sep = ".")] # time B não roda
+    rodada <- rodada + 1
+} else{ # time B
+    df_time2[, paste("pontos", rodada + 1, sep = ".")] <- df_time1[, paste("pontos", rodada, sep = ".")][c(nrow(df_time1), 2:nrow(df_time1) - 1)]
+    df_time1[, paste("pontos", rodada + 1, sep = ".")] <- df_time1[, paste("pontos", rodada, sep = ".")] # time A não roda
+    rodada <- rodada + 1
+}
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+# para as rodadas subsequentes 
+# i = 33
+# i = 4
+for(i in 2:nrow(matrix_pontos)){
+    check_roda <- matrix_pontos[c(i - 1, i), ]
+# em caso de pontos sequenciais do mesmo time
+if(any(all(check_roda[, "time.A"] == c(1, 1)) | all(check_roda[, "time.B"] == c(1, 1)))){
+    df_time1[, paste("pontos", i, sep = ".")] <- df_time1[, paste("pontos", i - 1, sep = ".")] # time A não roda
+    df_time2[, paste("pontos", i, sep = ".")] <- df_time2[, paste("pontos", i - 1, sep = ".")] # time B não roda
+}
+
+# caso algum time pontue após perder um ponto 
+if(any(all(check_roda[, "time.A"] == c(0, 1)) | all(check_roda[, "time.B"] == c(0, 1)))){
+    time_roda <- c("time.A", "time.B")[c(all(check_roda[, "time.A"] == c(0, 1)), all(check_roda[, "time.B"] == c(0, 1)))] # nome do time que roda - ganhou ponto após não pontuar
+    time_nao_roda <- c("time.A", "time.B")[c(all(check_roda[, "time.A"] == c(0, 1)), all(check_roda[, "time.B"] == c(0, 1))) == FALSE] # nome do time que não roda - perdeu ponto
+    if(time_roda == "time.A"){
+        df_time1[, paste("pontos", i, sep = ".")] <- df_time1[, paste("pontos", i - 1, sep = ".")][c(nrow(df_time1), 2:nrow(df_time1) - 1)]    
+    } else{
+        df_time2[, paste("pontos", i, sep = ".")] <- df_time2[, paste("pontos", i - 1, sep = ".")][c(nrow(df_time2), 2:nrow(df_time2) - 1)]
+    }
+    if(time_nao_roda == "time.A"){
+        df_time1[, paste("pontos", i, sep = ".")] <- df_time1[, paste("pontos", i - 1, sep = ".")] # time A não roda
+    } else{
+        df_time2[, paste("pontos", i, sep = ".")] <- df_time2[, paste("pontos", i - 1, sep = ".")] # time B não roda
+    }
+    
+} # finaliza o if de quando há alguma rodada   
+}
+check_roda <- matrix_pontos[c(i - 1, i), ]
+# em caso de pontos sequenciais do mesmo time
+if(any(check_roda[, "time.A"] == c(1, 1) | check_roda[, "time.B"] == c(1, 1))){
+    df_time1[, paste("pontos", rodada + 1, sep = ".")] <- df_time1[, paste("pontos", rodada, sep = ".")] # time A não roda
+    df_time2[, paste("pontos", rodada + 1, sep = ".")] <- df_time2[, paste("pontos", rodada, sep = ".")] # time B não roda
+}
+
+# caso algum time pontue após perder um ponto 
+if(any(check_roda[, "time.A"] == c(0, 1) | check_roda[, "time.B"] == c(0, 1))){
+    time_roda <- c("time.A", "time.B")[c(all(check_roda[, "time.A"] == c(0, 1)), all(check_roda[, "time.B"] == c(0, 1)))] # nome do time que roda - ganhou ponto após não pontuar
+    time_nao_roda <- c("time.A", "time.B")[c(all(check_roda[, "time.A"] == c(0, 1)), all(check_roda[, "time.B"] == c(0, 1))) == FALSE] # nome do time que não roda - perdeu ponto
+    if(time_roda == "time.A"){
+        df_time1[, paste("pontos", rodada + 1, sep = ".")] <- df_time1[, paste("pontos", rodada, sep = ".")][c(nrow(df_time1), 2:nrow(df_time1) - 1)]    
+    } else{
+        df_time2[, paste("pontos", rodada + 1, sep = ".")] <- df_time2[, paste("pontos", rodada, sep = ".")][c(nrow(df_time2), 2:nrow(df_time2) - 1)]
+    }
+    if(time_nao_roda == "time.A"){
+        df_time1[, paste("pontos", rodada + 1, sep = ".")] <- df_time1[, paste("pontos", rodada, sep = ".")] # time A não roda
+    } else{
+        df_time2[, paste("pontos", rodada + 1, sep = ".")] <- df_time2[, paste("pontos", rodada, sep = ".")] # time B não roda
+    }
+    
+} # finaliza o if de quando há alguma rodada
+
+
+
+if(matrix_pontos[c(1, 2), ])
+df_time1[, paste("pontos", rodada + 1, sep = ".")] <- df_time1[, paste("pontos", rodada, sep = ".")][c(nrow(df_time1), 2:nrow(df_time1) - 1)]
+rodada <- rodada + 1    
+rodada <- 0
+df_time1[, paste("pontos", rodada + 1, sep = ".")] <- df_time1[, paste("pontos", rodada, sep = ".")][c(nrow(df_time1), 2:nrow(df_time1) - 1)]
+rodada <- rodada + 1
+
+
 ```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
