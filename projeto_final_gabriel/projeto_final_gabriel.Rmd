@@ -52,8 +52,7 @@ if(time_roda == "time.A"){ # time A
 }
 
 # para as rodadas subsequentes 
-# i = 33
-# i = 4
+
 for(i in 2:nrow(matrix_pontos)){
     check_roda <- matrix_pontos[c(i - 1, i), ]
 # em caso de pontos sequenciais do mesmo time
@@ -78,39 +77,6 @@ if(any(all(check_roda[, "time.A"] == c(0, 1)) | all(check_roda[, "time.B"] == c(
     }
     
 } # finaliza o if de quando há alguma rodada   
-}
-check_roda <- matrix_pontos[c(i - 1, i), ]
-# em caso de pontos sequenciais do mesmo time
-if(any(check_roda[, "time.A"] == c(1, 1) | check_roda[, "time.B"] == c(1, 1))){
-    df_time1[, paste("pontos", rodada + 1, sep = ".")] <- df_time1[, paste("pontos", rodada, sep = ".")] # time A não roda
-    df_time2[, paste("pontos", rodada + 1, sep = ".")] <- df_time2[, paste("pontos", rodada, sep = ".")] # time B não roda
-}
-
-# caso algum time pontue após perder um ponto 
-if(any(check_roda[, "time.A"] == c(0, 1) | check_roda[, "time.B"] == c(0, 1))){
-    time_roda <- c("time.A", "time.B")[c(all(check_roda[, "time.A"] == c(0, 1)), all(check_roda[, "time.B"] == c(0, 1)))] # nome do time que roda - ganhou ponto após não pontuar
-    time_nao_roda <- c("time.A", "time.B")[c(all(check_roda[, "time.A"] == c(0, 1)), all(check_roda[, "time.B"] == c(0, 1))) == FALSE] # nome do time que não roda - perdeu ponto
-    if(time_roda == "time.A"){
-        df_time1[, paste("pontos", rodada + 1, sep = ".")] <- df_time1[, paste("pontos", rodada, sep = ".")][c(nrow(df_time1), 2:nrow(df_time1) - 1)]    
-    } else{
-        df_time2[, paste("pontos", rodada + 1, sep = ".")] <- df_time2[, paste("pontos", rodada, sep = ".")][c(nrow(df_time2), 2:nrow(df_time2) - 1)]
-    }
-    if(time_nao_roda == "time.A"){
-        df_time1[, paste("pontos", rodada + 1, sep = ".")] <- df_time1[, paste("pontos", rodada, sep = ".")] # time A não roda
-    } else{
-        df_time2[, paste("pontos", rodada + 1, sep = ".")] <- df_time2[, paste("pontos", rodada, sep = ".")] # time B não roda
-    }
-    
-} # finaliza o if de quando há alguma rodada
-
-
-
-if(matrix_pontos[c(1, 2), ])
-df_time1[, paste("pontos", rodada + 1, sep = ".")] <- df_time1[, paste("pontos", rodada, sep = ".")][c(nrow(df_time1), 2:nrow(df_time1) - 1)]
-rodada <- rodada + 1    
-rodada <- 0
-df_time1[, paste("pontos", rodada + 1, sep = ".")] <- df_time1[, paste("pontos", rodada, sep = ".")][c(nrow(df_time1), 2:nrow(df_time1) - 1)]
-rodada <- rodada + 1
-
+} # finaliza o for
 
 ```
